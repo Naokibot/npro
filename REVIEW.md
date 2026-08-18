@@ -1,28 +1,25 @@
-# Npro 1.2.0 source review
+# Npro 1.2.1 source review
 
 ## Scope
 
-This pass is a source-structure cleanup only. Runtime features, commands, permissions, configuration keys, point costs and daily-reward behavior are intentionally unchanged from the previously verified Npro 1.2.0 build.
+This pass changes only the presentation of daily-login reward messages. Point amounts, once-per-day rules, time-zone handling, commands, permissions, costs and persistence semantics remain unchanged from Npro 1.2.0.
 
-The supplied Npro 1.1.0 JAR did not contain Java source for `NproPlugin`, `BiomeNames` or `ShulkerSession`. Rewriting those classes from decompiled output would create unnecessary behavioral risk, so the release build preserves the verified 1.1.0 bytecode and applies only the already-reviewed 1.2.0 hook/accessor patch.
+The supplied Npro 1.1.0 JAR did not contain Java source for `NproPlugin`, `BiomeNames` or `ShulkerSession`. Rewriting those classes from decompiled output would create unnecessary behavioral risk, so the release build preserves the verified 1.1.0 bytecode and applies only the reviewed 1.2.x hook/accessor patch.
 
-## Style cleanup
+## Message presentation
 
-- Small single-purpose methods.
-- Descriptive local and method names.
-- Guard clauses instead of deeply nested branches.
-- Final fields and final implementation classes where appropriate.
-- No reflection in the daily-reward path.
-- No generated-looking section comments or redundant Javadocs.
-- Direct Bukkit APIs and explicit failure paths.
+- Daily reward success broadcasts now use a gold `[FreeLife]` prefix and yellow body text.
+- The already-claimed private message uses the same presentation.
+- Existing 1.2.0 installations do not need to delete `config.yml`; the prefix has a code-level default.
+- `&` color codes in the prefix/body are translated through Bukkit `ChatColor`.
 
-## Behavioral equivalence checks
+## Behavioral checks
 
-- The newly organized `PatchNpro.java` produces a patched `NproPlugin.class` byte-for-byte identical to the previous 1.2.0 patcher output.
-- Patched `NproPlugin.class` SHA-256: `a2a251b10e6772949934b814d4c87ea0717f65c31279d7314c606d3e5f8c675f`.
-- `BiomeNames.class` and `NproPlugin$ShulkerSession.class` are copied unchanged from the verified 1.1.0 baseline.
-- `plugin.yml` retains the same 1.2.0 commands and permissions.
-- `config.yml` retains the same runtime values and daily-login defaults.
+- `BiomeNames.class` and `NproPlugin$ShulkerSession.class` remain unchanged from the verified 1.1.0 baseline.
+- Only the Npro enable-version string changes in the patched main class; feature logic remains binary-preserved.
+- Patched 1.2.1 `NproPlugin.class` SHA-256: `f2a26240399614c78864be6e417fe8e7be5f8cef0b57f661d56f4a8caa7ca82a`.
+- `plugin.yml` keeps the same commands and permissions while reporting version 1.2.1.
+- Costs and daily reward amount remain unchanged.
 
 ## Daily reward regression cases
 
@@ -41,4 +38,4 @@ The daily reward writes a temporary file in the same directory and replaces `dat
 
 ## Runtime boundary
 
-The repository CI builds the release against the real Spigot 1.21.1 API. The regression harness was also executed during this review. A real Minecraft client/server E2E session is still outside CI; no claim is made that a player login was executed on the user's live server during this review.
+The repository CI builds the release against the real Spigot 1.21.1 API. The regression harness was executed locally during this review. A real Minecraft client/server E2E session is still outside CI; no claim is made that a player login was executed on the user's live server during this review.

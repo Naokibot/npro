@@ -102,7 +102,7 @@ public final class PatchNpro {
 
         @Override
         public void visitLdcInsn(Object value) {
-            super.visitLdcInsn("Npro 1.1.0 enabled.".equals(value) ? "Npro 1.2.0 enabled." : value);
+            super.visitLdcInsn("Npro 1.1.0 enabled.".equals(value) ? "Npro 1.2.1 enabled." : value);
         }
 
         @Override

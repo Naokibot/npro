@@ -30,14 +30,14 @@ jobs:
 
       - name: Verify release
         run: |
-          JAR=build/libs/Npro-1.2.0-Spigot-1.21.1.jar
+          JAR=build/libs/Npro-1.2.1-Spigot-1.21.1.jar
           unzip -t "$JAR"
-          test "$(unzip -p "$JAR" plugin.yml | grep -c "version: '1.2.0'")" -eq 1
+          test "$(unzip -p "$JAR" plugin.yml | grep -c "version: '1.2.1'")" -eq 1
           test "$(unzip -p "$JAR" config.yml | grep -c '^daily-login-reward:')" -eq 1
           rm -rf build/verify && mkdir -p build/verify
           (cd build/verify && jar xf ../../"$JAR")
           printf '%s  %s\n' \
-            'a2a251b10e6772949934b814d4c87ea0717f65c31279d7314c606d3e5f8c675f' \
+            'f2a26240399614c78864be6e417fe8e7be5f8cef0b57f661d56f4a8caa7ca82a' \
             'build/verify/com/sagakenichi/npro/NproPlugin.class' | sha256sum -c -
           javap -verbose -classpath "$JAR" com.sagakenichi.npro.NproPlugin | grep 'major version: 65'
           javap -verbose -classpath "$JAR" com.sagakenichi.npro.DailyLoginRewardListener | grep 'major version: 65'
@@ -48,6 +48,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Npro-1.2.0-Spigot-1.21.1
-          path: build/libs/Npro-1.2.0-Spigot-1.21.1.jar
+          name: Npro-1.2.1-Spigot-1.21.1
+          path: build/libs/Npro-1.2.1-Spigot-1.21.1.jar
           if-no-files-found: error

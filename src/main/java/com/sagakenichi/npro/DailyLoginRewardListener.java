@@ -1,6 +1,7 @@
 package com.sagakenichi.npro;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 public final class DailyLoginRewardListener implements Listener {
 
     private static final String DEFAULT_TIME_ZONE = "Asia/Tokyo";
+    private static final String DEFAULT_PREFIX = "&6[FreeLife] &e";
     private static final int DEFAULT_REWARD_POINTS = 5;
     private static final String DEFAULT_BROADCAST = "%player%がログインしログイン報酬%points%ポイント受け取りました！！";
     private static final String DEFAULT_ALREADY_CLAIMED = "あなたはすでに報酬を受け取っています！";
@@ -130,9 +132,15 @@ public final class DailyLoginRewardListener implements Listener {
         if (message == null) {
             message = fallback;
         }
-        return message
+        String prefix = plugin.getConfig().getString("daily-login-reward.prefix", DEFAULT_PREFIX);
+        if (prefix == null) {
+            prefix = DEFAULT_PREFIX;
+        }
+
+        String formatted = prefix + message
                 .replace("%player%", playerName)
                 .replace("%points%", Integer.toString(points));
+        return ChatColor.translateAlternateColorCodes('&', formatted);
     }
 
     private int addWithoutOverflow(int current, int reward) {

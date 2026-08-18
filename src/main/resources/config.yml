@@ -1,4 +1,4 @@
-# Npro 1.1.0
+# Npro 1.2.1
 # Player points, passes and global enabled state are stored in data.yml.
 initial-points: 10
 
@@ -15,6 +15,7 @@ biome-search-radius: 10000
 # Existing installations without these keys use the same defaults automatically.
 daily-login-reward:
   enabled: true
+  prefix: "&6[FreeLife] &e"
   points: 5
   time-zone: Asia/Tokyo
   broadcast-message: "%player%がログインしログイン報酬%points%ポイント受け取りました！！"

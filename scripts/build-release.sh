@@ -11,7 +11,7 @@ fi
 
 BUILD="$ROOT/build/release"
 BASE="$ROOT/base/Npro-1.1.0.jar"
-OUTPUT="$ROOT/build/libs/Npro-1.2.0-Spigot-1.21.1.jar"
+OUTPUT="$ROOT/build/libs/Npro-1.2.1-Spigot-1.21.1.jar"
 EXPORT="java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED"
 
 rm -rf "$BUILD" "$ROOT/build/libs"
