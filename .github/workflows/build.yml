@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Fetch Spigot 1.21.1 API
+        run: |
+          mvn -q dependency:get \
+            -Dartifact=org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT \
+            -DremoteRepositories=spigot::default::https://hub.spigotmc.org/nexus/repository/snapshots/
+          API_JAR="$(find "$HOME/.m2/repository/org/spigotmc/spigot-api/1.21.1-R0.1-SNAPSHOT" -name 'spigot-api-1.21.1-R0.1-*.jar' ! -name '*sources*' ! -name '*javadoc*' | head -1)"
+          test -n "$API_JAR"
+          echo "API_JAR=$API_JAR" >> "$GITHUB_ENV"
+
+      - name: Build release
+        run: bash scripts/build-release.sh "$API_JAR"
+
+      - name: Verify release
+        run: |
+          JAR=build/libs/Npro-1.2.0-Spigot-1.21.1.jar
+          unzip -t "$JAR"
+          test "$(unzip -p "$JAR" plugin.yml | grep -c "version: '1.2.0'")" -eq 1
+          test "$(unzip -p "$JAR" config.yml | grep -c '^daily-login-reward:')" -eq 1
+          rm -rf build/verify && mkdir -p build/verify
+          (cd build/verify && jar xf ../../"$JAR")
+          printf '%s  %s\n' \
+            'a2a251b10e6772949934b814d4c87ea0717f65c31279d7314c606d3e5f8c675f' \
+            'build/verify/com/sagakenichi/npro/NproPlugin.class' | sha256sum -c -
+          javap -verbose -classpath "$JAR" com.sagakenichi.npro.NproPlugin | grep 'major version: 65'
+          javap -verbose -classpath "$JAR" com.sagakenichi.npro.DailyLoginRewardListener | grep 'major version: 65'
+          if jar tf "$JAR" | grep -Eq '(^|/)tests?/|org/bukkit/'; then
+            echo 'test/stub classes leaked into release jar' >&2
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Npro-1.2.0-Spigot-1.21.1
+          path: build/libs/Npro-1.2.0-Spigot-1.21.1.jar
+          if-no-files-found: error

@@ -1,0 +1,21 @@
+# Npro 1.1.0
+# Player points, passes and global enabled state are stored in data.yml.
+initial-points: 10
+
+costs:
+  shulker-pass: 5
+  ender-pass: 3
+  rtp: 1
+  biome-search: 2
+
+# Maximum radius in blocks used by the biome finder in the player's current world.
+biome-search-radius: 10000
+
+# Once-per-calendar-day login reward.
+# Existing installations without these keys use the same defaults automatically.
+daily-login-reward:
+  enabled: true
+  points: 5
+  time-zone: Asia/Tokyo
+  broadcast-message: "%player%がログインしログイン報酬%points%ポイント受け取りました！！"
+  already-claimed-message: "あなたはすでに報酬を受け取っています！"

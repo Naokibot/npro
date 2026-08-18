@@ -1,0 +1,38 @@
+name: Npro
+version: '1.2.0'
+main: com.sagakenichi.npro.NproPlugin
+api-version: '1.21'
+author: sagakenichi
+description: Npoint convenience features with daily login rewards, portable containers, RTP and biome finder for Spigot 1.21.1
+softdepend: [SmartCraftWarehouse, FreeLife]
+commands:
+  np:
+    description: Opens the Npro GUI
+    usage: /np
+    aliases: [npro, naokipro]
+    permission: npro.use
+  sb:
+    description: Opens the shulker box in the main hand
+    usage: /sb
+    permission: npro.use
+  ec:
+    description: Opens the player's ender chest
+    usage: /ec
+    permission: npro.use
+  npoint:
+    description: Shows or manages Npoint
+    usage: /npoint [balance|give|take|set]
+    aliases: [npont, npoints]
+  nproadmin:
+    description: Enables or disables Npro for non-OP players
+    usage: /nproadmin <enable|disable|status>
+    aliases: [nprotoggle]
+permissions:
+  npro.use:
+    default: true
+  npro.admin.points:
+    default: op
+  npro.rtp.free:
+    default: op
+  npro.biome.free:
+    default: op
